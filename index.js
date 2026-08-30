@@ -208,6 +208,72 @@ app.post('/api/v1/score', async (req, res) => {
   }
 });
 
+// ---- API 2: Analyze single message (For manual DetectScreen) ----
+app.post('/api/v1/analyze', async (req, res) => {
+  try {
+    const { text, media } = req.body;
+    const contentToAnalyze = text || "Analyze this content";
+    
+    console.log(`🔍 Manual Analysis Request: ${contentToAnalyze.substring(0, 30)}...`);
+
+    if (!allowGeminiCall()) {
+      const fallbackScore = Math.round(computeLocalScore(contentToAnalyze) * 100);
+      let risk = "Low";
+      if (fallbackScore >= 70) risk = "High";
+      else if (fallbackScore >= 40) risk = "Medium";
+
+      return res.json({
+        score: fallbackScore,
+        risk: risk,
+        reason: 'Heuristic fallback (rate limit)'
+      });
+    }
+
+    try {
+      const prompt = makePrompt(contentToAnalyze);
+      
+      // If we had image processing, we would pass it here. For now, text-based.
+      const response = await model.generateContent(prompt);
+      const rawText = response.response.text().trim();
+      const parsed = JSON.parse(rawText);
+      
+      const floatScore = Math.min(Math.max(Number(parsed.score) || 0.5, 0), 1);
+      const intScore = Math.round(floatScore * 100);
+      
+      let risk = "Low";
+      if (intScore >= 75) risk = "High";
+      else if (intScore >= 40) risk = "Medium";
+
+      res.json({
+        score: intScore,
+        risk: risk,
+        reason: parsed.reason || 'Analyzed successfully'
+      });
+
+    } catch (aiErr) {
+      console.warn('⚠️ Gemini analyze failed, falling back', aiErr.message);
+      const fallbackScore = Math.round(computeLocalScore(contentToAnalyze) * 100);
+      let risk = "Low";
+      if (fallbackScore >= 70) risk = "High";
+      else if (fallbackScore >= 40) risk = "Medium";
+
+      res.json({
+        score: fallbackScore,
+        risk: risk,
+        reason: 'Fallback due to AI error'
+      });
+    }
+
+  } catch (err) {
+    console.error('❌ Unexpected analyze error:', err);
+    res.json({
+      score: 50,
+      risk: "Medium",
+      reason: "Server error - fallback"
+    });
+  }
+});
+
 // ---- Start server (if running locally) ----
 if (process.env.NODE_ENV !== 'production') {
   const PORT = process.env.PORT || 3000;

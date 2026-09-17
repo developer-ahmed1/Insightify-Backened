@@ -1,4 +1,79 @@
-node_modules/
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Testing
+.tox/
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+
+# Environment
 .env
+.env.local
+.env.*.local
+*.env
+*.env.*
+
+# Secrets & credentials
+firebase-credentials.json
+*-firebase-adminsdk-*.json
+*.pem
+*.key
+credentials.json
+client_secret*.json
+api geemini.txt
+
+# Logs
+*.log
+logs/
+
+# OS
 .DS_Store
-.env.example
+Thumbs.db
+
+# Project specific
+*.db
+*.sqlite
+*.sqlite3
+
+# Alembic
+alembic/versions/*.py
+!alembic/versions/.gitkeep

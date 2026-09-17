@@ -1,0 +1,263 @@
+{
+    "info": {
+        "name": "Insightyfy API",
+        "description": "API collection for testing Insightyfy backend",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Health",
+            "item": [
+                {
+                    "name": "Health Check",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/health"
+                    }
+                },
+                {
+                    "name": "Root",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Test (Dev Only)",
+            "item": [
+                {
+                    "name": "Quick Scam Detection",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "{{baseUrl}}/test/detect?text=URGENT! Your bank account has been suspended. Click here to verify immediately.",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "test",
+                                "detect"
+                            ],
+                            "query": [
+                                {
+                                    "key": "text",
+                                    "value": "URGENT! Your bank account has been suspended. Click here to verify immediately."
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Detection",
+            "item": [
+                {
+                    "name": "Text Detection",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/v1/detection/text",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"content\": \"URGENT! Your bank account has been suspended. Click here to verify immediately: http://fake-bank.scam.com\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Audio Detection",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/v1/detection/audio",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"media_url\": \"https://example.com/audio.mp3\",\n  \"transcript\": \"Hello, this is Microsoft tech support. Your computer has been infected with a virus.\"\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Users",
+            "item": [
+                {
+                    "name": "Get Current User",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/v1/users/me",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Get User Limits",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/v1/users/me/limits",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "History",
+            "item": [
+                {
+                    "name": "Get Detection History",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/v1/history",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Feed",
+            "item": [
+                {
+                    "name": "Get Feed",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/v1/feed",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Create Post",
+                    "request": {
+                        "method": "POST",
+                        "url": "{{baseUrl}}/api/v1/feed/posts",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"content\": \"⚠️ Watch out for fake job offers asking for upfront payment!\",\n  \"post_type\": \"warning\"\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Gamification",
+            "item": [
+                {
+                    "name": "Get Badges",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/v1/gamification/badges",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Get Leaderboard",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/v1/gamification/leaderboard",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Education",
+            "item": [
+                {
+                    "name": "Get Categories",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/v1/education/categories",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "Get Content",
+                    "request": {
+                        "method": "GET",
+                        "url": "{{baseUrl}}/api/v1/education/content",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:8000"
+        },
+        {
+            "key": "token",
+            "value": "dev_testuser123",
+            "description": "Use 'dev_<userid>' for dev testing, or actual Firebase token for prod"
+        }
+    ]
+}

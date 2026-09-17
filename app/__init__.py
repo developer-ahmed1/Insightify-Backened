@@ -1,0 +1,3 @@
+"""
+Insightyfy Backend Application
+"""

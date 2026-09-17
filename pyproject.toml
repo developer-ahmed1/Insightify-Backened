@@ -8,6 +8,10 @@ version = "0.1.0"
 description = "AI-powered scam detection platform"
 readme = "README.md"
 requires-python = ">=3.11"
+dependencies = [
+    "fastapi[standard]>=0.115.0",
+    "fastapi-cli>=0.0.7",
+]
 
 [tool.setuptools.packages.find]
 where = ["."]

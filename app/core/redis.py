@@ -14,13 +14,20 @@ _redis_client: Optional[Redis] = None
 _redis_attempted: bool = False
 
 
+import asyncio
+
 async def get_redis() -> Optional[Redis]:
     """Get Redis client instance. Returns None if connection fails or Redis is unavailable."""
     global _redis_client, _redis_attempted
     if _redis_attempted:
         return _redis_client
 
-    if not settings.redis_url or settings.redis_url.strip() in ("", "none", "disabled"):
+    # In production without an explicit Redis server, skip localhost
+    if (
+        not settings.redis_url
+        or settings.redis_url.strip() in ("", "none", "disabled")
+        or (settings.is_production and "localhost" in settings.redis_url)
+    ):
         _redis_attempted = True
         return None
 
@@ -29,10 +36,10 @@ async def get_redis() -> Optional[Redis]:
             settings.redis_url,
             encoding="utf-8",
             decode_responses=True,
-            socket_connect_timeout=0.5,
-            socket_timeout=0.5,
+            socket_timeout=1.0,
+            socket_connect_timeout=1.0,
         )
-        await client.ping()
+        await asyncio.wait_for(client.ping(), timeout=1.0)
         _redis_client = client
     except Exception as e:
         from app.core.logging import get_logger
